@@ -1,8 +1,8 @@
 name: UMC Dev CI/CD
 
 on:
-  push:
-    branches: [ "main" ]
+#  push:
+#    branches: [ "main" ]
   workflow_dispatch: # (2).수동 실행도 가능하도록
 
 jobs:
