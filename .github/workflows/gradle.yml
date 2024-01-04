@@ -53,7 +53,7 @@ jobs:
       - run: mkdir ~/distfiles
       - uses: actions/download-artifact@v2
         with:
-          name: distfiles
+          name: build-artifacts
           path: distfiles
 
       - name: Download build artifacts
