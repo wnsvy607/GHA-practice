@@ -50,20 +50,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Download build artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: build-artifacts
-        
-    - name: SCP JAR to EC2
-      uses: appleboy/scp-action@master
-      with:
-        key: ${{ secrets.EC2_KEY }}
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        port: 22
-        source: "build/libs/*.jar"
-        target: "/home/ubuntu/app"
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+
+      - name: SCP JAR to EC2
+        uses: appleboy/scp-action@master
+        with:
+          key: ${{ secrets.EC2_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+  #        port: 22
+          source: "build/libs/*.jar"
+          target: "/home/ubuntu/app"
 
 #    - name: SCP JAR to EC2
 #      uses: appleboy/ssh-action@master
