@@ -62,7 +62,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          source: "build/libs/*.jar, Dockerfile"
+          source: "./build/libs/*.jar, ./Dockerfile"
           target: "/home/ubuntu/app"
 
 #    - name: SSH
