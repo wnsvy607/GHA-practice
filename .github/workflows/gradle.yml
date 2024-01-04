@@ -49,12 +49,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: mkdir ~/distfiles
+
+      - run: mkdir ~/app
+
       - uses: actions/download-artifact@v2
         with:
           name: build-artifacts
-          path: distfiles
+          path: app
 
       - name: Download build artifacts
         uses: actions/download-artifact@v2
@@ -68,8 +69,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
   #        port: 22
-          source: "distfiles/*"
-          target: "/home/ubuntu/app"
+          source: "app/*.jar"
+          target: "/home/ubuntu"
 
 #    - name: SCP JAR to EC2
 #      uses: appleboy/ssh-action@master
