@@ -43,16 +43,13 @@ jobs:
         name: build-artifacts
         path: |
           build/libs/*.jar
+          Dockerfile
 
   deploy:
     name: Deploy with SCP and Docker
     needs: build
     runs-on: ubuntu-latest
     steps:
-
-      - uses: actions/download-artifact@v2
-        with:
-          name: build-artifacts
 
       - name: Download build artifacts
         uses: actions/download-artifact@v2
@@ -65,11 +62,10 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-  #        port: 22
-          source: "*.jar"
+          source: "build/libs/*.jar, Dockerfile"
           target: "/home/ubuntu/app"
 
-#    - name: SCP JAR to EC2
+#    - name: SSH
 #      uses: appleboy/ssh-action@master
 #      with:
 #        key: ${{ secrets.EC2_KEY }}
