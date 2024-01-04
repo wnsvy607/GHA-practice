@@ -43,6 +43,7 @@ jobs:
         name: build-artifacts
         path: |
           build/libs/*.jar
+          Dockerfile-helper
 
   deploy:
     name: Deploy with SCP and Docker
