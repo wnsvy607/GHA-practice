@@ -5,18 +5,21 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Spring CI / CD with Gradle
 
 on:
+#    푸쉬할 때마다 액션이 트리거 된다.
   push:
     branches: [ "main" ]
+
 #  pull_request:
 #    branches: [ "main" ]
+#  수동으로 워크플로우 트리거 가능
   workflow_dispatch:
 
 jobs:
   build:
-
+    name: CI with Gradle
     runs-on: ubuntu-latest
 
     steps:
@@ -31,11 +34,11 @@ jobs:
         
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
-      shell: bash # (6).권한 부여
+      shell: bash
   
     - name: Build with Gradle
       run: ./gradlew clean build -x test
-      shell: bash # (7).build 시작
+      shell: bash
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
@@ -45,7 +48,7 @@ jobs:
           build/libs/*.jar
 
   deploy:
-    name: Deploy with SCP and Docker
+    name: CD with SSH
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -54,8 +57,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build-artifacts
-      - run: "ls -al"
 
+      # JAR 파일을 EC2에 배포하는 step
       - name: SCP JAR to EC2
         uses: appleboy/scp-action@master
         with:
@@ -65,12 +68,14 @@ jobs:
           source: "*.jar"
           target: "/home/ubuntu/app"
 
-      - name: SSH
+      # EC2에 SSH로 배포 커맨드를 입력하는 step
+      - name: Deploy SSH
         uses: appleboy/ssh-action@master
         with:
           key: ${{ secrets.EC2_KEY }}
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
+          # 기존 실행 중인 서버 종료 후 jar 파일 실행
           script: |
             sudo fuser -k -n tcp 8080
             sleep 15
